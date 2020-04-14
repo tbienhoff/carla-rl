@@ -27,6 +27,12 @@ class TrainingSuite(CoRL2017):
         camera.set_position(2.0, 0.0, 1.4)
         camera.set_rotation(-15.0, 0, 0)
 
+        depth_camera = Camera('CameraDepth', PostProcessing='Depth')
+        depth_camera.set(FOV=25)
+        depth_camera.set_image_size(200, 150)
+        depth_camera.set_position(2.0, 0.0, 1.4)
+        depth_camera.set_rotation(-15.0, 0, 0)
+
         if self._city_name == 'Town01':
             
             if self._subset == 'keep_lane':
@@ -80,6 +86,7 @@ class TrainingSuite(CoRL2017):
                 # Add all the cameras that were set for this experiments
 
                 conditions.add_sensor(camera)
+                conditions.add_sensor(depth_camera)
 
                 experiment = Experiment()
                 experiment.set(

@@ -145,7 +145,14 @@ class CarlaObservationConverter(object):
             img = cv2.resize(sensor_data['CameraRGB'].data, (self.h, self.w)) / 255.0
         except:
             raise CameraException(env_id)
+
+        # print("IMG Original shape: " + str(img.shape))
         img = np.transpose(img, (2, 0, 1))
+        # print("IMG shape: " + str(img.shape))
+
+        # print(sensor_data['CameraDepth'].data)
+        # print("Depth shape: " + str(sensor_data['CameraDepth'].data.shape))
+        # raise NotImplementedError("asdfasdf")
 
         if self.rel_coord_system:
             return {'img': img, 'v': v, 'world_pos': world_pos}

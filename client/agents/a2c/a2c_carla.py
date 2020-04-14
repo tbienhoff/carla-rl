@@ -98,6 +98,10 @@ class A2CCarla(Agent):
 
 
     def act(self, inputs, rnn_hxs, masks, deterministic=False):
+        # print(inputs)
+        # print(list(inputs.keys()))
+        # print(inputs['img'].size())
+        # raise NotImplementedError("hi")
         return self.model.act(inputs['img'], inputs['v'], rnn_hxs, masks, self.eps_curr, deterministic)
 
     def get_value(self, inputs, rnn_hxs, masks):
