@@ -82,6 +82,7 @@ class CarlaEnv(object):
         self.steps = 0
         self.num_episodes = 0
 
+        self.converter = CarlaObservationConverter()
         self.constraint_turn = constraint_turn
 
 
