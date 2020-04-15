@@ -196,6 +196,9 @@ def main():
             total_reward += carla_rewards.sum().item()
             total_steps += config.num_processes
 
+            if info[0]['constraint_turn_violated']:
+                logger.info('~~~~~~~ CONSTRAINT VIOLATED ~~~~~~~~~')
+
             if done.any():
                 total_episodes += done.sum()
                 torch_done = torch.tensor(done.astype(int)).byte()
