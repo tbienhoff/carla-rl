@@ -143,7 +143,7 @@ if __name__ == '__main__':
 
     logger = setup_carla_logger('output_logger/', experiment_name, 'carla-debug')
     envs = make_vec_envs(obs_converter, action_converter, args.port, config.seed, config.num_processes,
-                         config.gamma, device, reward_class_name='RewardCarla', num_frame_stack=1, subset=None,
+                         config.gamma, device, reward_class_name='CarlaReward', num_frame_stack=1, subset=None,
                          norm_reward=norm_reward,
                          video_every=args.video_interval,
                          video_dir=os.path.join(args.save_dir, 'video'),
