@@ -14,6 +14,7 @@ from carla.settings import CarlaSettings
 from carla.client import CarlaClient
 from carla.tcp import TCPConnectionError
 from observation_utils import CameraException
+from observation_utils import CarlaObservationConverter
 import gym
 
 from carla_logger import get_carla_logger
@@ -38,7 +39,8 @@ class CarlaEnv(object):
                  video_every=100,
                  video_dir='./video/',
                  distance_for_success=2.0,
-                 benchmark=False):
+                 benchmark=False,
+                 constraint_turn=False):
 
         self.logger = get_carla_logger()
         self.logger.info('Environment {} running in port {}'.format(env_id, port))
@@ -79,6 +81,8 @@ class CarlaEnv(object):
             pass
         self.steps = 0
         self.num_episodes = 0
+
+        self.constraint_turn = constraint_turn
 
 
     def step(self, action):
@@ -143,6 +147,23 @@ class CarlaEnv(object):
 
         # Additional information
         info = {'carla-reward': reward}
+
+        if self.constraint_turn:
+            direction_str = self.converter.direction_to_string(directions)
+            constraint_turn_violated = False
+
+            if direction_str == 'TURN_LEFT' and control.steer > 0:
+                constraint_turn_violated = True
+
+            if direction_str == 'TURN_RIGHT' and control.steer < 0:
+                constraint_turn_violated = True
+
+            if reward > 0 and constraint_turn_violated:
+                reward = reward / 2
+
+            info['constraint_turn_violated'] = constraint_turn_violated
+
+        
 
         self.steps += 1
 

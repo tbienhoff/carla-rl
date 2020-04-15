@@ -29,3 +29,7 @@ num_mini_batch: 16 # Number of mini-batches for PPO
 clip_param: 0.2 # PPO clip parameter
 
 reward_class: CarlaReward
+
+constraints: False
+constraint_turn: False
+constraint_stop: False
