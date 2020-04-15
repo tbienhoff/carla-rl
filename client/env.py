@@ -123,7 +123,7 @@ class CarlaEnv(object):
             except TCPConnectionError as e:
                 self.logger.debug('TCPConnectionError inside step(): {}'.format(e))
                 self.done = True
-                return self.last_obs, 0.0, True, {'carla-reward': 0.0}
+                return self.last_obs, 0.0, True, {'carla-reward': 0.0, 'constraint_turn_violated': False}
 
             break
 
