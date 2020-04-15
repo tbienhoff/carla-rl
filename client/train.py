@@ -114,7 +114,8 @@ def main():
     envs = make_vec_envs(obs_converter, action_converter, args.starting_port, config.seed, config.num_processes,
                                 config.gamma, device, config.reward_class, num_frame_stack=1, subset=config.experiments_subset,
                                 norm_reward=norm_reward, norm_obs=norm_obs, apply_her=config.num_virtual_goals > 0,
-                                video_every=args.video_interval, video_dir=os.path.join(args.save_dir, 'video', experiment_name))
+                                video_every=args.video_interval, video_dir=os.path.join(args.save_dir, 'video', experiment_name),
+                                constraint_turn=config.constraint_turn)
 
 
     if config.agent == 'forward':
