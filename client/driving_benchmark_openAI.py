@@ -163,7 +163,8 @@ if __name__ == '__main__':
                                 config.entropy_coef,
                                 lr=config.lr,
                                 eps=config.eps, alpha=config.alpha,
-                                max_grad_norm=config.max_grad_norm)
+                                max_grad_norm=config.max_grad_norm,
+                                device=device)
 
     elif config.agent == 'acktr':
         agent = agents.A2CCarla(obs_converter,

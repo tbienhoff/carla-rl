@@ -20,12 +20,13 @@ class A2CCarla(Agent):
                  eps=None,
                  alpha=None,
                  max_grad_norm=None,
-                 acktr=False):
+                 acktr=False,
+                 device="cpu"):
 
         self.obs_converter = obs_converter
         self.action_converter = action_converter
         self.model = Policy(self.obs_converter.get_observation_space(),
-                            self.action_converter.get_action_space()).to("cuda:0")
+                            self.action_converter.get_action_space()).to(device)
         self.acktr = acktr
 
         self.value_loss_coef = value_loss_coef
