@@ -294,7 +294,9 @@ if __name__ == '__main__':
 
             print('experiment ended')
             recording.log_end()
-        except:
+        except Exception as e:
+            print(repr(e))
+            logger.exception(e)
             break
     recording.write_measurements_results(experiments[exp_idx], rep, pose, reward_vec, control_vec)
 

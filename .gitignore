@@ -18,3 +18,4 @@ outputs_hyperparam_tuning
 .vscode
 video/
 debug*
+output_logger/
