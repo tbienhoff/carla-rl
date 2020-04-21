@@ -80,7 +80,7 @@ class CarlaEnv(object):
         except OSError:
             pass
         self.steps = 0
-        self.num_episodes = 0
+        self.num_episodes = 1
 
         self.converter = CarlaObservationConverter()
         self.constraint_turn = constraint_turn
@@ -145,6 +145,7 @@ class CarlaEnv(object):
         # Get the reward
         env_state = {'timeout': timeout, 'collision': collision, 'success': success}
         reward = self._reward.get_reward(measurements, self._target, self.last_direction, control, env_state)
+        raw_reward = reward
 
         constraint_turn_violated = False
         if self.constraint_turn:
@@ -161,7 +162,7 @@ class CarlaEnv(object):
                 reward = reward / 2
 
         # Additional information
-        info = {'carla-reward': reward, 'constraint_turn_violated': constraint_turn_violated}
+        info = {'carla-reward': reward, 'carla-reward-raw': raw_reward, 'constraint_turn_violated': constraint_turn_violated}
 
         self.steps += 1
 

@@ -175,8 +175,10 @@ def main():
     total_steps = 0
     total_episodes = 0
     total_reward = 0
+    total_reward_raw = 0
 
     episode_reward = torch.zeros(config.num_processes)
+    episode_reward_raw = torch.zeros(config.num_processes)
 
 
     for j in range(config.num_updates):
@@ -194,8 +196,11 @@ def main():
 
             # For logging purposes
             carla_rewards = torch.tensor([i['carla-reward'] for i in info], dtype=torch.float)
+            carla_rewards_raw = torch.tensor([i['carla-reward-raw'] for i in info], dtype=torch.float)
             episode_reward += carla_rewards
+            episode_reward_raw += carla_rewards_raw
             total_reward += carla_rewards.sum().item()
+            total_reward_raw += carla_rewards_raw.sum().item()
             total_steps += config.num_processes
 
             if info[0]['constraint_turn_violated']:
@@ -205,10 +210,15 @@ def main():
                 total_episodes += done.sum()
                 torch_done = torch.tensor(done.astype(int)).byte()
                 mean_episode_reward = episode_reward[torch_done].mean().item()
-                logger.info('{} episode(s) finished with reward {}'.format(done.sum(), mean_episode_reward))
+                mean_episode_reward_raw = episode_reward_raw[torch_done].mean().item()
+                logger.info('{} episode(s) finished with reward: {}, raw reward: {}'.format(
+                    done.sum(), mean_episode_reward, mean_episode_reward_raw))
                 writer.add_scalar('train/mean_ep_reward_vs_steps', mean_episode_reward, total_steps)
                 writer.add_scalar('train/mean_ep_reward_vs_episodes', mean_episode_reward, total_episodes)
                 episode_reward[torch_done] = 0
+                writer.add_scalar('train/mean_ep_reward_raw_vs_steps', mean_episode_reward_raw, total_steps)
+                writer.add_scalar('train/mean_ep_reward_vs_episodes', mean_episode_reward_raw, total_episodes)
+                episode_reward_raw[torch_done] = 0
 
             # If done then clean the history of observations.
             masks = torch.FloatTensor(1-done)
@@ -249,6 +259,9 @@ def main():
             # Logging to tensorboard
             writer.add_scalar('train/cum_reward_vs_steps', total_reward, total_steps)
             writer.add_scalar('train/cum_reward_vs_updates', total_reward, j+1)
+
+            writer.add_scalar('train/cum_reward_raw_vs_steps', total_reward_raw, total_steps)
+            writer.add_scalar('train/cum_reward_raw_vs_updates', total_reward_raw, j+1)
 
             if config.agent in ['a2c', 'acktr', 'ppo']:
                 writer.add_scalar('debug/value_loss_vs_steps', value_loss, total_steps)
