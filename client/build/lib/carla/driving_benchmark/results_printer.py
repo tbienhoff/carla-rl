@@ -17,8 +17,11 @@ def print_summary(metrics_summary, weathers, path):
                          4: 'Cloudy After Rain', 14: 'Soft Rain Sunset'}
 
     # First we write the entire dictionary on the benchmark folder.
-    with open(os.path.join(path, 'metrics.json'), 'w') as fo:
-        fo.write(json.dumps(metrics_summary))
+    if path is not None:
+        with open(os.path.join(path, 'metrics.json'), 'w') as fo:
+            fo.write(json.dumps(metrics_summary))
+    else:
+        print("Not saving metrics.json")
 
     # Second we plot the metrics that are already ready by averaging
 
