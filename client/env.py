@@ -148,16 +148,13 @@ class CarlaEnv(object):
         raw_reward = reward
 
         constraint_turn_violated = False
-        if self.constraint_turn:
-            direction_str = self.converter.direction_to_string(directions)
+        direction_str = self.converter.direction_to_string(directions)
+        if direction_str == 'TURN_LEFT' and control.steer > 0:
+            constraint_turn_violated = True
+        if direction_str == 'TURN_RIGHT' and control.steer < 0:
+            constraint_turn_violated = True
             
-
-            if direction_str == 'TURN_LEFT' and control.steer > 0:
-                constraint_turn_violated = True
-
-            if direction_str == 'TURN_RIGHT' and control.steer < 0:
-                constraint_turn_violated = True
-
+        if self.constraint_turn:
             if reward > 0 and constraint_turn_violated:
                 reward = reward / 2
 

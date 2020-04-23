@@ -177,6 +177,9 @@ def main():
     total_reward = 0
     total_reward_raw = 0
 
+    turn_violations = 0
+
+
     episode_reward = torch.zeros(config.num_processes)
     episode_reward_raw = torch.zeros(config.num_processes)
 
@@ -202,6 +205,8 @@ def main():
             total_reward += carla_rewards.sum().item()
             total_reward_raw += carla_rewards_raw.sum().item()
             total_steps += config.num_processes
+
+            turn_violations += sum([i['constraint_turn_violated'] for i in info])
 
             if info[0]['constraint_turn_violated']:
                 logger.info('~~~~~~~ CONSTRAINT VIOLATED ~~~~~~~~~')
@@ -251,8 +256,8 @@ def main():
             # Logging to the stdout/our logs
             end = time.time()
             logger.info('------------------------------------')
-            logger.info('Episodes {}, Updates {}, num timesteps {}, FPS {}'\
-                .format(total_episodes, j + 1, total_num_steps, total_num_steps / (end - start)))
+            logger.info('Episodes {}, Updates {}, num timesteps {}, turn violations {}, FPS {}'\
+                .format(total_episodes, j + 1, total_num_steps, turn_violations, total_num_steps / (end - start)))
             logger.info('------------------------------------')
 
 
@@ -262,6 +267,9 @@ def main():
 
             writer.add_scalar('train/cum_reward_raw_vs_steps', total_reward_raw, total_steps)
             writer.add_scalar('train/cum_reward_raw_vs_updates', total_reward_raw, j+1)
+
+            writer.add_scalar('train/turn_violations_vs_steps', turn_violations, total_steps)
+            writer.add_scalar('train/turn_violations_vs_updates', turn_violations, j+1)
 
             if config.agent in ['a2c', 'acktr', 'ppo']:
                 writer.add_scalar('debug/value_loss_vs_steps', value_loss, total_steps)
