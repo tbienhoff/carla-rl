@@ -44,8 +44,9 @@ def print_summary(metrics_summary, weathers, path):
 
         metric_sum_values = np.zeros(number_of_episodes)
         for weather, tasks in values.items():
-            if weather in set(weathers):
-                print('  Weather: ', weather_name_dict[weather])
+            weather_int = round(float(weather))
+            if weather_int in set(weathers):
+                print('  Weather: ', weather_name_dict[weather_int])
                 count = 0
                 for t in tasks:
                     # if isinstance(t, np.ndarray) or isinstance(t, list):
