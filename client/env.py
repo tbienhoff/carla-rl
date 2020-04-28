@@ -153,7 +153,7 @@ class CarlaEnv(object):
             constraint_turn_violated = True
         if direction_str == 'TURN_RIGHT' and control.steer < 0:
             constraint_turn_violated = True
-            
+
         if self.constraint_turn:
             if reward > 0 and constraint_turn_violated:
                 reward = reward / 2
@@ -393,7 +393,7 @@ class CarlaEnv(object):
 
     def _make_carla_client(self, host, port):
 
-        while True:
+        for _ in range(20):    # Try to connect for up to 20 times (usually connects first attempt if everything is correct)
             try:
                 self.logger.info("Trying to make client on port {}".format(port))
                 self._client = CarlaClient(host, port, timeout=100)
