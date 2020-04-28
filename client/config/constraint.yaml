@@ -1,5 +1,5 @@
 agent: a2c
-num_updates: 100000
+num_updates: 20010
 lr: 0.0007 # Learning rate
 eps: 0.00001 # RMSprop optimizer epsilon
 alpha: 0.99 # RMSProp alpha
@@ -10,7 +10,7 @@ action_type: carla-original # carla-original or continuous
 entropy_coef: 0.01
 value_loss_coef: 0.5
 max_grad_norm: 0.5 # Max norm of the gradients
-seed: 1 # Random seed
+seed: 9127 # Random seed
 num_processes: 1 # Number of processes to use for training.
 num_steps: 20
 num_stack_frames: 2 # Number of stacked frames to train
