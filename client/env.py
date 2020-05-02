@@ -155,8 +155,8 @@ class CarlaEnv(object):
             constraint_turn_violated = True
 
         if self.constraint_turn:
-            if reward > 0 and constraint_turn_violated:
-                reward = reward / 2
+            if constraint_turn_violated:
+                reward -= 1
 
         # Additional information
         info = {'carla-reward': reward, 'carla-reward-raw': raw_reward, 'constraint_turn_violated': constraint_turn_violated}
